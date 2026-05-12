@@ -181,31 +181,21 @@
       <input type="file" id="fileInput" accept="image/*" multiple onchange="addPhotos(event)" style="display:none">
     </div>
     <div class="portfolio-tabs">
-      <button class="tab-btn active" onclick="switchTab('eventos')">Eventos</button>
-      <button class="tab-btn" onclick="switchTab('retratos')">Retratos</button>
+     <div class="tab-panel active" id="tab-eventos">
+    <div class="photo-grid" id="grid-eventos">
+        <div class="photo-item"><img src="IMG_4033.webp" onclick="openL('IMG_4033.webp')"></div>
+        <div class="photo-item"><img src="IMG_4038.webp" onclick="openL('IMG_4038.webp')"></div>
+        <div class="photo-item"><img src="IMG_4047 (1).webp" onclick="openL('IMG_4047 (1).webp')"></div>
     </div>
-   <div class="tab-panel active" id="tab-eventos">
-   <div class="photo-item">
-  <img src="IMG_4033.webp." alt="Evento" onclick="openL('IMG_4033.webp.')">
 </div>
-<div class="photo-item">
-  <img src="IMG_4038.webp.webp" alt="Evento" onclick="openL('IMG_4038.webp.webp')">
-</div>
-<div class="photo-item">
-  <img src="IMG_4047 (1).webp.webp" alt="Evento" onclick="openL('IMG_4047 (1).webp.webp')">
-</div>
-     
-<div class="photo-item">
-  <img src="19e1dc1642daf3e407b2.webp.webp" alt="Retrato" onclick="openL('19e1dc1642daf3e407b2.webp.webp')">
-</div>
-<div class="photo-item">
-  <img src="Espalda.webp.webp" alt="Retrato" onclick="openL('Espalda.webp.webp')">
-</div>
-<div class="photo-item">
-  <img src="Frostin.webp.webp" alt="Retrato" onclick="openL('Frostin.webp.webp')">
-</div>
-<div class="photo-item">
-  <img src="Laury_Jeinyliz.webp.webp" alt="Retrato" onclick="openL('Laury_Jeinyliz.webp.webp')">
+
+<div class="tab-panel" id="tab-retratos">
+    <div class="photo-grid" id="grid-retratos">
+        <div class="photo-item"><img src="19e1dc1642daf3e407b2.webp" onclick="openL('19e1dc1642daf3e407b2.webp')"></div>
+        <div class="photo-item"><img src="Espalda.webp" onclick="openL('Espalda.webp')"></div>
+        <div class="photo-item"><img src="Frostin.webp" onclick="openL('Frostin.webp')"></div>
+        <div class="photo-item"><img src="Laury_Jeinyliz.webp" onclick="openL('Laury_Jeinyliz.webp')"></div>
+    </div>
 </div>
    
 <div id="contacto" class="contact-section">
