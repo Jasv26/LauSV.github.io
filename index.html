@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lau SV Photography</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #1a1a1a;
+    --border: #2a2a2a;
+    --gold: #c9a96e;
+    --gold-light: #e8d5b0;
+    --white: #f5f2ee;
+    --gray: #888;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--black); color:var(--white); font-family:'Montserrat',sans-serif; font-weight:300; overflow-x:hidden; }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 48px;
+    background:rgba(10,10,10,0.95); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-logo img { height:52px; filter:invert(1) brightness(1.1); object-fit:contain; cursor:pointer; }
+  .nav-links { display:flex; gap:36px; list-style:none; }
+  .nav-links a {
+    color:var(--gray); text-decoration:none; font-size:11px;
+    letter-spacing:3px; text-transform:uppercase; transition:color 0.3s; cursor:pointer;
+  }
+  .nav-links a:hover { color:var(--gold); }
+
+  /* HERO */
+  .hero {
+    height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center;
+    position:relative; overflow:hidden; background:var(--black);
+  }
+  .hero::before {
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 40%, rgba(201,169,110,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 70% 70%, rgba(201,169,110,0.04) 0%, transparent 70%);
+  }
+  .hero-eyebrow { font-size:11px; letter-spacing:5px; text-transform:uppercase; color:var(--gold); margin-bottom:24px; animation:fadeUp 1s ease both; }
+  .hero h1 { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(56px,8vw,96px); line-height:1.0; color:var(--white); animation:fadeUp 1s 0.15s ease both; }
+  .hero h1 em { font-style:italic; color:var(--gold-light); }
+  .hero-sub { margin-top:28px; font-size:13px; letter-spacing:2px; color:var(--gray); text-transform:uppercase; animation:fadeUp 1s 0.3s ease both; }
+  .hero-cta { margin-top:52px; display:flex; gap:20px; animation:fadeUp 1s 0.45s ease both; }
+  
+  .btn { display:inline-flex; align-items:center; justify-content:center; padding:14px 36px; font-size:11px; letter-spacing:3px; text-transform:uppercase; text-decoration:none; cursor:pointer; border:none; font-family:'Montserrat',sans-serif; font-weight:400; transition:all 0.3s; }
+  .btn-primary { background:var(--gold); color:var(--black); }
+  .btn-primary:hover { background:var(--gold-light); transform:translateY(-2px); }
+  .btn-outline { background:transparent; color:var(--white); border:1px solid var(--border); }
+  .btn-outline:hover { border-color:var(--gold); color:var(--gold); transform:translateY(-2px); }
+
+  /* SECTIONS GENERAL */
+  .section-wrap { padding:100px 48px; max-width:1280px; margin:0 auto; }
+  .section-label { font-size:10px; letter-spacing:5px; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:clamp(36px,5vw,56px); line-height:1.1; margin-bottom:48px; }
+
+  /* SERVICIOS */
+  .services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2px; background:var(--border); border:1px solid var(--border); }
+  .service-card { background:var(--dark); padding:52px 40px; position:relative; overflow:hidden; transition:background 0.4s; }
+  .service-card:hover { background:var(--card); }
+  .service-num { font-family:'Cormorant Garamond',serif; font-size:64px; font-weight:300; color:var(--border); line-height:1; margin-bottom:20px; }
+  .service-card h3 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:400; margin-bottom:16px; color:var(--white); }
+  .service-card p { font-size:13px; line-height:1.8; color:var(--gray); }
+
+  /* PORTFOLIO */
+  .portfolio-section { background:var(--dark); padding:100px 48px; }
+  .portfolio-inner { max-width:1280px; margin:0 auto; }
+  .portfolio-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:40px; flex-wrap:wrap; gap:16px; }
+  .portfolio-tabs { display:flex; gap:0; margin-bottom:32px; border-bottom:1px solid var(--border); }
+  .tab-btn { background:transparent; border:none; color:var(--gray); font-family:'Montserrat',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; padding:14px 32px; cursor:pointer; position:relative; transition:color 0.3s; }
+  .tab-btn::after { content:''; position:absolute; bottom:-1px; left:0; width:100%; height:2px; background:var(--gold); transform:scaleX(0); transition:transform 0.3s; }
+  .tab-btn.active { color:var(--gold); }
+  .tab-btn.active::after { transform:scaleX(1); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+  .add-photo-btn { display:none; align-items:center; gap:10px; padding:12px 28px; background:transparent; border:1px solid var(--gold); color:var(--gold); font-size:11px; letter-spacing:3px; text-transform:uppercase; cursor:pointer; }
+  .add-photo-btn.visible { display:flex; }
+  .photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:4px; }
+  .photo-item { position:relative; aspect-ratio:4/3; overflow:hidden; background:var(--card); cursor:pointer; }
+  .photo-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.6s; }
+  .photo-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:flex-end; padding:16px; opacity:0; transition:opacity 0.3s; }
+  .photo-item:hover .photo-overlay { opacity:1; }
+  .photo-remove { background:var(--gold); border:none; color:var(--black); padding:7px 14px; cursor:pointer; display:none; }
+  .admin-active .photo-remove { display:block; }
+
+  /* ACERCA */
+  .about-text p { font-size:14px; line-height:2; color:var(--gray); margin-bottom:24px; }
+  .about-text p:first-of-type { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; font-style:italic; color:var(--gold-light); line-height:1.6; }
+
+  /* CONTACTO */
+  .contact-section { background:var(--black); border-top:1px solid var(--border); padding:100px 48px; text-align:center; }
+  .contact-inner { max-width:600px; margin:0 auto; }
+  .contact-links { display:flex; justify-content:center; gap:40px; margin-top:48px; flex-wrap:wrap; }
+  .contact-link { display:flex; flex-direction:column; align-items:center; gap:8px; text-decoration:none; color:var(--gray); transition:color 0.3s; }
+  .contact-link:hover { color:var(--gold); }
+  .contact-link-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; }
+  .contact-link-value { font-family:'Cormorant Garamond',serif; font-size:20px; }
+
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:200; align-items:center; justify-content:center; }
+  .modal-overlay.active { display:flex; }
+  .modal-box { background:var(--dark); border:1px solid var(--border); padding:52px; max-width:560px; width:90%; position:relative; }
+  .modal-options { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:30px; }
+  .modal-option { border:1px solid var(--border); padding:24px; text-align:center; text-decoration:none; color:white; transition: 0.3s; }
+  .modal-option:hover { border-color:var(--gold); }
+
+  /* ADMIN LOGO OCULTO */
+  .admin-trigger { position:fixed; bottom:20px; right:20px; width:40px; opacity:0.2; cursor:pointer; z-index:1000; filter:invert(1); }
+
+  /* LIGHTBOX */
+  .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:300; align-items:center; justify-content:center; }
+  .lightbox.active { display:flex; }
+  .lightbox img { max-width:90vw; max-height:90vh; }
+
+  footer { padding:40px; border-top:1px solid var(--border); text-align:center; color:var(--gray); font-size:11px; }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  @media(max-width:768px){ .nav-links{display:none;} .modal-options{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><img src="Lau SV negro.png" alt="Logo"></div>
+  <ul class="nav-links">
+    <li><a onclick="scrollTo('servicios')">Servicios</a></li>
+    <li><a onclick="scrollTo('portfolio')">Portafolio</a></li>
+    <li><a onclick="scrollTo('acerca')">Acerca</a></li>
+    <li><a onclick="scrollTo('contacto')">Contacto</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <p class="hero-eyebrow">Eventos & Retratos</p>
+  <h1>Lau SV<br><em>Photography</em></h1>
+  <p class="hero-sub">Capturando momentos que duran para siempre</p>
+  <div class="hero-cta">
+    <button class="btn btn-primary" onclick="scrollTo('portfolio')">Ver Portafolio</button>
+    <button class="btn btn-outline" onclick="openModal()">Reservar Sesión</button>
+  </div>
+</div>
+
+<div id="servicios" class="section-wrap">
+    <p class="section-label">Lo que ofrezco</p>
+    <h2 class="section-title">Servicios</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-num">01</div>
+        <h3>Eventos</h3>
+        <p>Bodas, cumpleaños y eventos corporativos capturados con autenticidad.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-num">02</div>
+        <h3>Retratos</h3>
+        <p>Sesiones personalizadas en estudio o exteriores para resaltar tu esencia.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-num">03</div>
+        <h3>Equipo</h3>
+        <p>Alquiler de iluminación profesional para fotógrafos y creadores.</p>
+      </div>
+    </div>
+</div>
+
+<div class="portfolio-section" id="portfolio">
+  <div class="portfolio-inner">
+    <div class="portfolio-header">
+      <h2 class="section-title">Portafolio</h2>
+      <button class="add-photo-btn" id="addPhotoBtn" onclick="document.getElementById('fileInput').click()">Añadir Fotos</button>
+      <input type="file" id="fileInput" accept="image/*" multiple onchange="addPhotos(event)" style="display:none">
+    </div>
+    <div class="portfolio-tabs">
+      <button class="tab-btn active" onclick="switchTab('eventos')">Eventos</button>
+      <button class="tab-btn" onclick="switchTab('retratos')">Retratos</button>
+    </div>
+    <div class="tab-panel active" id="tab-eventos"><div class="photo-grid" id="grid-eventos"></div></div>
+    <div class="tab-panel" id="tab-retratos"><div class="photo-grid" id="grid-retratos"></div></div>
+  </div>
+</div>
+
+<div id="acerca" class="section-wrap">
+    <p class="section-label">Mi historia</p>
+    <h2 class="section-title">Acerca de mí</h2>
+    <div class="about-text">
+      <p>La fotografía es preservar emociones y congelar el tiempo.</p>
+      <p>Me especializo en capturar la narrativa visual de tus momentos más importantes con un enfoque artístico y profesional.</p>
+    </div>
+</div>
+
+<div id="contacto" class="contact-section">
+    <div class="contact-inner">
+      <p class="section-label">Hablemos</p>
+      <h2 class="section-title">¿Tienes un proyecto?</h2>
+      <div class="contact-links">
+        <a href="mailto:lausvphotography@gmail.com" class="contact-link">
+          <span class="contact-link-label">Email</span>
+          <span class="contact-link-value">lausvphotography@gmail.com</span>
+        </a>
+        <a href="https://instagram.com/lausvphotography" target="_blank" class="contact-link">
+          <span class="contact-link-label">Instagram</span>
+          <span class="contact-link-value">@lausvphotography</span>
+        </a>
+      </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="reservaModal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <h3>Reservar Sesión</h3>
+    <p>¿Cómo prefieres contactarme?</p>
+    <div class="modal-options">
+      <a href="mailto:lausvphotography@gmail.com" class="modal-option">Email</a>
+      <a href="https://wa.me/17870000000" class="modal-option">WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+  <img id="lightboxImg" src="">
+</div>
+
+<img src="Lau SV negro.png" class="admin-trigger" onclick="handleAdmin()" alt="Admin">
+
+<footer><p>&copy; 2025 Lau SV Photography — Todos los derechos reservados</p></footer>
+
+<script>
+function scrollTo(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+
+let isAdmin = false;
+let clicks = 0;
+function handleAdmin() {
+  clicks++;
+  if(clicks >= 7) {
+    const pw = prompt('Contraseña:');
+    if(pw === 'lausvadmin2025') {
+      isAdmin = !isAdmin;
+      document.getElementById('addPhotoBtn').classList.toggle('visible', isAdmin);
+      document.body.classList.toggle('admin-active', isAdmin);
+      renderAll();
+    }
+    clicks = 0;
+  }
+}
+
+let currentTab = 'eventos';
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(tab)));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+function getPhotos(tab) { return JSON.parse(localStorage.getItem('photos_' + tab) || '[]'); }
+function savePhotos(tab, arr) { localStorage.setItem('photos_' + tab, JSON.stringify(arr)); }
+
+function addPhotos(e) {
+  const files = Array.from(e.target.files);
+  const photos = getPhotos(currentTab);
+  let loaded = 0;
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      photos.push(ev.target.result);
+      if(++loaded === files.length) { savePhotos(currentTab, photos); renderGrid(currentTab); }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removePhoto(tab, idx) {
+  const p = getPhotos(tab); p.splice(idx, 1);
+  savePhotos(tab, p); renderGrid(tab);
+}
+
+function renderGrid(tab) {
+  const g = document.getElementById('grid-' + tab);
+  const p = getPhotos(tab);
+  g.innerHTML = p.length ? '' : '<p style="padding:40px;color:gray">Galería vacía.</p>';
+  p.forEach((src, i) => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    div.innerHTML = `<img src="${src}" onclick="openL('${src}')">
+      <div class="photo-overlay"><button class="photo-remove" onclick="removePhoto('${tab}',${i})">Eliminar</button></div>`;
+    g.appendChild(div);
+  });
+}
+
+function renderAll() { renderGrid('eventos'); renderGrid('retratos'); }
+function openL(s) { document.getElementById('lightboxImg').src = s; document.getElementById('lightbox').classList.add('active'); }
+function openModal() { document.getElementById('reservaModal').classList.add('active'); }
+function closeModal(e) { if(e.target.classList.contains('modal-overlay')) e.target.classList.remove('active'); }
+
+renderAll();
+</script>
+</body>
+</html>
