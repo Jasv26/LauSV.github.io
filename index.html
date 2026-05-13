@@ -4,31 +4,48 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lau SV Photography</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- 1. PRECONNECT: abre conexión con Google Fonts antes de necesitarla -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- 2. FUENTES NO-BLOQUEANTES: carga en background, no bloquea el render -->
+<link rel="preload" as="style"
+  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap"
+  onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+</noscript>
+
+<!-- 3. PRELOAD LOGO: carga el logo lo antes posible -->
+<link rel="preload" href="Lau SV negro.png" as="image">
+
 <style>
-/* ────────────────────────────────────────── RESET & ROOT */
+/* fallback fonts mientras carga Google Fonts (evita texto invisible) */
 :root {
   --black:#0a0a0a; --dark:#111; --card:#1a1a1a; --border:#2a2a2a;
   --gold:#c9a96e; --gold-light:#e8d5b0; --white:#f5f2ee; --gray:#888;
+  --font-serif:'Cormorant Garamond',Georgia,serif;
+  --font-sans:'Montserrat','Helvetica Neue',Arial,sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--black);color:var(--white);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden;}
+body{background:var(--black);color:var(--white);font-family:var(--font-sans);font-weight:300;overflow-x:hidden;}
 
-/* ────────────────────────────────────────── NAV */
+/* NAV */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
   padding:16px 48px;
   background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);
   border-bottom:1px solid var(--border);
+  /* 4. GPU: nav en su propia capa */
+  will-change:transform;
+  transform:translateZ(0);
 }
 .nav-logo img{height:48px;filter:invert(1) brightness(1.1);object-fit:contain;}
 .nav-links{display:flex;gap:32px;list-style:none;}
-.nav-links a{
-  color:var(--gray);text-decoration:none;font-size:11px;
-  letter-spacing:3px;text-transform:uppercase;transition:color .3s;cursor:pointer;
-}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:11px;letter-spacing:3px;text-transform:uppercase;transition:color .3s;cursor:pointer;}
 .nav-links a:hover{color:var(--gold);}
 
 /* hamburger */
@@ -37,89 +54,52 @@ nav{
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-
-.mobile-menu{
-  display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:90;
-  background:rgba(10,10,10,0.98);flex-direction:column;align-items:center;
-  justify-content:center;gap:40px;
-}
+.mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:90;background:rgba(10,10,10,0.98);flex-direction:column;align-items:center;justify-content:center;gap:40px;}
 .mobile-menu.open{display:flex;}
-.mobile-menu a{
-  color:var(--white);text-decoration:none;font-family:'Cormorant Garamond',serif;
-  font-size:40px;font-weight:300;font-style:italic;cursor:pointer;transition:color .3s;
-}
+.mobile-menu a{color:var(--white);text-decoration:none;font-family:var(--font-serif);font-size:40px;font-weight:300;font-style:italic;cursor:pointer;transition:color .3s;}
 .mobile-menu a:hover{color:var(--gold);}
 
-/* ────────────────────────────────────────── HERO */
-.hero{
-  height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;text-align:center;
-  position:relative;overflow:hidden;background:var(--black);
-}
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 60% 50% at 30% 40%,rgba(201,169,110,.07) 0%,transparent 70%),
-    radial-gradient(ellipse 40% 60% at 70% 70%,rgba(201,169,110,.04) 0%,transparent 70%);
-}
+/* HERO */
+.hero{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;background:var(--black);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 40%,rgba(201,169,110,.07) 0%,transparent 70%),radial-gradient(ellipse 40% 60% at 70% 70%,rgba(201,169,110,.04) 0%,transparent 70%);}
 .hero-eyebrow{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;animation:fadeUp 1s ease both;}
-.hero h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(52px,8vw,96px);line-height:1;color:var(--white);animation:fadeUp 1s .15s ease both;}
+.hero h1{font-family:var(--font-serif);font-weight:300;font-size:clamp(52px,8vw,96px);line-height:1;color:var(--white);animation:fadeUp 1s .15s ease both;}
 .hero h1 em{font-style:italic;color:var(--gold-light);}
 .hero-sub{margin-top:24px;font-size:12px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;animation:fadeUp 1s .3s ease both;}
 .hero-cta{margin-top:48px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;animation:fadeUp 1s .45s ease both;}
-
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  padding:14px 32px;font-size:11px;letter-spacing:3px;text-transform:uppercase;
-  text-decoration:none;cursor:pointer;border:none;
-  font-family:'Montserrat',sans-serif;font-weight:400;transition:all .3s;
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 32px;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;font-family:var(--font-sans);font-weight:400;transition:all .3s;}
 .btn-primary{background:var(--gold);color:var(--black);}
 .btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);}
 .btn-outline{background:transparent;color:var(--white);border:1px solid var(--border);}
 .btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px);}
-
 .scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;}
 .scroll-hint span{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);}
 .scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s infinite;}
 
-/* ────────────────────────────────────────── SHARED SECTION */
+/* SHARED */
 .section-wrap{padding:96px 48px;max-width:1280px;margin:0 auto;}
 .section-label{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
-.section-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(34px,5vw,56px);line-height:1.1;margin-bottom:48px;}
+.section-title{font-family:var(--font-serif);font-weight:300;font-size:clamp(34px,5vw,56px);line-height:1.1;margin-bottom:48px;}
 
-/* ────────────────────────────────────────── SERVICES */
+/* SERVICES */
 .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);}
 .service-card{background:var(--dark);padding:48px 36px;position:relative;overflow:hidden;transition:background .4s;}
 .service-card:hover{background:var(--card);}
 .service-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:linear-gradient(to right,var(--gold),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s;}
 .service-card:hover::after{transform:scaleX(1);}
-.service-num{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:300;color:var(--border);line-height:1;margin-bottom:18px;}
-.service-card h3{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:14px;color:var(--white);}
+.service-num{font-family:var(--font-serif);font-size:60px;font-weight:300;color:var(--border);line-height:1;margin-bottom:18px;}
+.service-card h3{font-family:var(--font-serif);font-size:26px;font-weight:400;margin-bottom:14px;color:var(--white);}
 .service-card p{font-size:13px;line-height:1.8;color:var(--gray);}
 
-/* ────────────────────────────────────────── PORTFOLIO */
+/* PORTFOLIO */
 .portfolio-section{background:var(--dark);padding:96px 48px;}
 .portfolio-inner{max-width:1280px;margin:0 auto;}
 .portfolio-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;flex-wrap:wrap;gap:16px;}
-
-.add-photo-btn{
-  display:none;align-items:center;gap:10px;padding:11px 26px;
-  background:transparent;border:1px solid var(--gold);color:var(--gold);
-  font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:3px;
-  text-transform:uppercase;cursor:pointer;transition:all .3s;
-}
+.add-photo-btn{display:none;align-items:center;gap:10px;padding:11px 26px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--font-sans);font-size:11px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;}
 .add-photo-btn.visible{display:flex;}
 .add-photo-btn:hover{background:var(--gold);color:var(--black);}
-
-/* TABS */
 .portfolio-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:28px;}
-.tab-btn{
-  background:transparent;border:none;color:var(--gray);
-  font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:3px;
-  text-transform:uppercase;padding:14px 32px;cursor:pointer;
-  position:relative;transition:color .3s;
-}
+.tab-btn{background:transparent;border:none;color:var(--gray);font-family:var(--font-sans);font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:14px 32px;cursor:pointer;position:relative;transition:color .3s;}
 .tab-btn::after{content:'';position:absolute;bottom:-1px;left:0;width:100%;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .3s;}
 .tab-btn.active{color:var(--gold);}
 .tab-btn.active::after{transform:scaleX(1);}
@@ -127,113 +107,93 @@ nav{
 .tab-panel.active{display:block;}
 
 /* GRID */
-.photo-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
 .photo-item{
-  position:relative;
-  width:100%;
-  padding-bottom:75%;
-  overflow:hidden;
-  background:var(--card);
-  cursor:pointer;
-  display:block;
+  position:relative;width:100%;padding-bottom:75%;
+  overflow:hidden;background:var(--card);cursor:pointer;display:block;
+  /* 5. GPU: prepara cada foto para animación sin repaint */
+  will-change:transform;
 }
 .photo-item img{
-  position:absolute;
-  top:0;left:0;
-  width:100%;height:100%;
-  object-fit:cover;
-  display:block;
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  object-fit:cover;display:block;
   transition:transform .6s cubic-bezier(.25,.46,.45,.94);
+  /* 6. decodificación asíncrona: no bloquea el hilo principal */
+  decoding:async;
 }
 .photo-item:hover img{transform:scale(1.06);}
-.photo-overlay{
-  position:absolute;inset:0;
-  background:rgba(0,0,0,.45);
-  display:flex;align-items:flex-end;padding:14px;
-  opacity:0;transition:opacity .3s;
-  pointer-events:none;
-}
+.photo-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;padding:14px;opacity:0;transition:opacity .3s;pointer-events:none;}
 .photo-item:hover .photo-overlay{opacity:1;}
 .photo-remove{pointer-events:auto;}
-.photo-remove{
-  background:rgba(201,169,110,.9);border:none;color:var(--black);
-  font-size:10px;letter-spacing:2px;text-transform:uppercase;
-  padding:6px 14px;cursor:pointer;font-family:'Montserrat',sans-serif;
-  margin-left:auto;display:none;
-}
+.photo-remove{background:rgba(201,169,110,.9);border:none;color:var(--black);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;cursor:pointer;font-family:var(--font-sans);margin-left:auto;display:none;}
 .admin-active .photo-remove{display:block;}
 
-.empty-state{
-  grid-column:1/-1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:72px 32px;border:1px dashed var(--border);text-align:center;gap:14px;
+/* 7. SKELETON: placeholder animado mientras carga la foto */
+.photo-item::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,var(--card) 25%,var(--border) 50%,var(--card) 75%);
+  background-size:200% 100%;
+  animation:skeleton 1.5s infinite;
+  z-index:0;
 }
+.photo-item img.loaded{z-index:1;}
+@keyframes skeleton{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.empty-state{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 32px;border:1px dashed var(--border);text-align:center;gap:14px;}
 .empty-state p{color:var(--gray);font-size:13px;line-height:1.8;}
 
-/* ────────────────────────────────────────── LIGHTBOX */
+/* LIGHTBOX */
 .lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:500;align-items:center;justify-content:center;}
 .lightbox.active{display:flex;}
 .lightbox-img-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
 .lightbox-img-wrap img{max-width:95vw;max-height:95vh;width:auto;height:auto;object-fit:contain;display:block;animation:fadeIn .3s ease;box-shadow:0 0 60px rgba(0,0,0,.8);}
 .lightbox-close{position:absolute;top:-44px;right:0;font-size:34px;color:var(--white);cursor:pointer;background:none;border:none;line-height:1;transition:color .2s;}
 .lightbox-close:hover{color:var(--gold);}
-.lightbox-prev,.lightbox-next{
-  position:absolute;top:50%;transform:translateY(-50%);
-  background:none;border:1px solid rgba(255,255,255,.15);color:var(--white);
-  font-size:22px;cursor:pointer;padding:12px 18px;transition:all .3s;
-}
+.lightbox-prev,.lightbox-next{position:absolute;top:50%;transform:translateY(-50%);background:none;border:1px solid rgba(255,255,255,.15);color:var(--white);font-size:22px;cursor:pointer;padding:12px 18px;transition:all .3s;}
 .lightbox-prev{left:-64px;}
 .lightbox-next{right:-64px;}
 .lightbox-prev:hover,.lightbox-next:hover{border-color:var(--gold);color:var(--gold);}
 
-/* ────────────────────────────────────────── MODAL */
+/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:400;align-items:center;justify-content:center;}
 .modal-overlay.active{display:flex;}
 .modal-box{background:var(--dark);border:1px solid var(--border);padding:48px;max-width:540px;width:90%;position:relative;animation:fadeUp .3s ease both;}
-.modal-box h3{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;margin-bottom:10px;}
+.modal-box h3{font-family:var(--font-serif);font-size:36px;font-weight:300;margin-bottom:10px;}
 .modal-box>p{color:var(--gray);font-size:13px;line-height:1.8;margin-bottom:36px;}
 .modal-close{position:absolute;top:18px;right:22px;font-size:28px;background:none;border:none;color:var(--gray);cursor:pointer;line-height:1;transition:color .2s;}
 .modal-close:hover{color:var(--white);}
 .modal-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.modal-option{
-  display:flex;flex-direction:column;align-items:center;gap:14px;
-  padding:28px 20px;border:1px solid var(--border);text-decoration:none;
-  color:var(--white);transition:all .3s;cursor:pointer;
-}
+.modal-option{display:flex;flex-direction:column;align-items:center;gap:14px;padding:28px 20px;border:1px solid var(--border);text-decoration:none;color:var(--white);transition:all .3s;cursor:pointer;}
 .modal-option:hover{border-color:var(--gold);background:rgba(201,169,110,.05);}
 .modal-option svg{color:var(--gold);}
 .modal-option-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gray);}
-.modal-option-value{font-family:'Cormorant Garamond',serif;font-size:16px;text-align:center;line-height:1.4;}
+.modal-option-value{font-family:var(--font-serif);font-size:16px;text-align:center;line-height:1.4;}
 
-/* ────────────────────────────────────────── ACERCA */
+/* ACERCA */
 .about-text p{font-size:14px;line-height:2;color:var(--gray);margin-bottom:22px;}
-.about-text p:first-of-type{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;color:var(--gold-light);line-height:1.6;}
+.about-text p:first-of-type{font-family:var(--font-serif);font-size:22px;font-weight:300;font-style:italic;color:var(--gold-light);line-height:1.6;}
 
-/* ────────────────────────────────────────── CONTACTO */
+/* CONTACTO */
 .contact-section{background:var(--black);border-top:1px solid var(--border);padding:96px 48px;text-align:center;}
 .contact-inner{max-width:620px;margin:0 auto;}
 .contact-links{display:flex;justify-content:center;gap:40px;margin-top:44px;flex-wrap:wrap;}
 .contact-link{display:flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:var(--gray);transition:color .3s;}
 .contact-link:hover{color:var(--gold);}
 .contact-link-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;}
-.contact-link-value{font-family:'Cormorant Garamond',serif;font-size:19px;}
+.contact-link-value{font-family:var(--font-serif);font-size:19px;}
 
-/* ────────────────────────────────────────── FOOTER */
+/* FOOTER */
 footer{background:var(--black);border-top:1px solid var(--border);padding:28px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
 footer img{height:30px;filter:invert(1) opacity(.35);object-fit:contain;}
 footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
 .admin-dot{background:none;border:none;color:transparent;font-size:10px;cursor:pointer;padding:6px;user-select:none;}
 
-/* ────────────────────────────────────────── ANIMATIONS */
+/* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes scrollPulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ────────────────────────────────────────── RESPONSIVE */
+/* RESPONSIVE */
 @media(max-width:900px){
   .services-grid{grid-template-columns:1fr;}
   .photo-grid{grid-template-columns:repeat(2,1fr);}
@@ -263,10 +223,10 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
 </head>
 <body>
 
-<!-- ── NAV ── -->
+<!-- NAV -->
 <nav>
   <div class="nav-logo">
-    <img src="Lau SV negro.png" alt="Lau SV Photography">
+    <img src="Lau SV negro.png" alt="Lau SV Photography" width="120" height="48" fetchpriority="high">
   </div>
   <ul class="nav-links">
     <li><a onclick="navTo('servicios')">Servicios</a></li>
@@ -279,7 +239,7 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
   </button>
 </nav>
 
-<!-- ── MOBILE MENU ── -->
+<!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
   <a onclick="navTo('servicios');closeMenu()">Servicios</a>
   <a onclick="navTo('portfolio');closeMenu()">Portafolio</a>
@@ -287,7 +247,7 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
   <a onclick="navTo('contacto');closeMenu()">Contacto</a>
 </div>
 
-<!-- ── HERO ── -->
+<!-- HERO -->
 <div class="hero">
   <p class="hero-eyebrow">Eventos &amp; Retratos</p>
   <h1>Lau SV<br><em>Photography</em></h1>
@@ -302,7 +262,7 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
   </div>
 </div>
 
-<!-- ── SERVICIOS ── -->
+<!-- SERVICIOS -->
 <div id="servicios">
   <div class="section-wrap">
     <p class="section-label">Lo que ofrezco</p>
@@ -327,7 +287,7 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
   </div>
 </div>
 
-<!-- ── PORTFOLIO ── -->
+<!-- PORTFOLIO -->
 <div class="portfolio-section" id="portfolio">
   <div class="portfolio-inner">
     <div class="portfolio-header">
@@ -343,12 +303,10 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
       <input type="file" id="fileInput" accept="image/*" multiple
         onchange="addPhotos(event)" style="display:none">
     </div>
-
     <div class="portfolio-tabs">
       <button class="tab-btn active" onclick="switchTab('eventos',this)">Eventos</button>
       <button class="tab-btn" onclick="switchTab('retratos',this)">Retratos &amp; Estudio</button>
     </div>
-
     <div class="tab-panel active" id="tab-eventos">
       <div class="photo-grid" id="grid-eventos"></div>
     </div>
@@ -358,17 +316,17 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
   </div>
 </div>
 
-<!-- ── LIGHTBOX ── -->
+<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="lbBgClick(event)">
   <div class="lightbox-img-wrap">
     <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
     <button class="lightbox-prev" onclick="lbNav(-1)">&#8249;</button>
-    <img id="lightboxImg" src="" alt="">
+    <img id="lightboxImg" src="" alt="" decoding="async">
     <button class="lightbox-next" onclick="lbNav(1)">&#8250;</button>
   </div>
 </div>
 
-<!-- ── RESERVAR MODAL ── -->
+<!-- RESERVAR MODAL -->
 <div class="modal-overlay" id="reservaModal" onclick="closeModalBg(event)">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -394,7 +352,7 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
   </div>
 </div>
 
-<!-- ── ACERCA ── -->
+<!-- ACERCA -->
 <div id="acerca">
   <div class="section-wrap">
     <p class="section-label">Mi historia</p>
@@ -406,7 +364,7 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
   </div>
 </div>
 
-<!-- ── CONTACTO ── -->
+<!-- CONTACTO -->
 <div class="contact-section" id="contacto">
   <div class="contact-inner">
     <p class="section-label">Hablemos</p>
@@ -430,14 +388,15 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
   </div>
 </div>
 
-<!-- ── FOOTER ── -->
+<!-- FOOTER -->
 <footer>
-  <img src="Lau SV negro.png" alt="Lau SV Photography">
+  <img src="Lau SV negro.png" alt="Lau SV Photography" width="80" height="30" loading="lazy">
   <p>&copy; 2025 Lau SV Photography — Todos los derechos reservados</p>
   <button class="admin-dot" onclick="handleAdmin()">·</button>
 </footer>
 
-<script>
+<!-- 8. SCRIPT DIFERIDO: carga después del HTML, no bloquea la página -->
+<script defer>
 /* ── NAVIGATION ── */
 function navTo(id) {
   const el = document.getElementById(id);
@@ -500,7 +459,7 @@ function switchTab(tab, btn) {
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
-/* ── PHOTOS ── */
+/* ── PHOTOS (localStorage para fotos del admin) ── */
 function getPhotos(tab) {
   try { return JSON.parse(localStorage.getItem('lau_photos_' + tab) || '[]'); }
   catch(e) { return []; }
@@ -509,7 +468,6 @@ function savePhotos(tab, arr) {
   try { localStorage.setItem('lau_photos_' + tab, JSON.stringify(arr)); }
   catch(e) { alert('Almacenamiento lleno. Elimina fotos antes de añadir más.'); }
 }
-
 function addPhotos(e) {
   const files = Array.from(e.target.files);
   if (!files.length) return;
@@ -519,39 +477,48 @@ function addPhotos(e) {
     const reader = new FileReader();
     reader.onload = ev => {
       photos.push(ev.target.result);
-      if (++loaded === files.length) {
-        savePhotos(currentTab, photos);
-        renderGrid(currentTab);
-      }
+      if (++loaded === files.length) { savePhotos(currentTab, photos); renderGrid(currentTab); }
     };
     reader.readAsDataURL(file);
   });
   e.target.value = '';
 }
-
 function removePhoto(tab, idx) {
   if (!confirm('¿Eliminar esta foto?')) return;
-  const p = getPhotos(tab);
-  p.splice(idx, 1);
-  savePhotos(tab, p);
-  renderGrid(tab);
+  const p = getPhotos(tab); p.splice(idx, 1);
+  savePhotos(tab, p); renderGrid(tab);
 }
 
-/* fotos fijas en GitHub (siempre visibles para todos) */
+/* ── FOTOS ESTÁTICAS DE GITHUB ── */
 const STATIC_PHOTOS = {
   eventos:  ['e1.webp.webp','e2.webp.webp','e3.webp.webp'],
   retratos: ['r1.webp.webp','r2.webp.webp','r3.webp.webp','r4.webp.webp']
 };
-
 function getAllPhotos(tab) {
-  /* estáticas primero, luego las subidas por admin */
   return [...STATIC_PHOTOS[tab], ...getPhotos(tab)];
 }
 
+/* ── 9. INTERSECTION OBSERVER: lazy load inteligente ──
+   Carga la foto solo cuando está a 200px de entrar en pantalla */
+const imgObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      if (img.dataset.src) {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        img.onload = () => img.classList.add('loaded');
+        img.onerror = () => img.classList.add('loaded'); // evita skeleton eterno
+      }
+      imgObserver.unobserve(img);
+    }
+  });
+}, { rootMargin: '200px 0px' }); // empieza a cargar 200px antes de ser visible
+
 function renderGrid(tab) {
   const grid = document.getElementById('grid-' + tab);
-  const all  = getAllPhotos(tab);
-  const dynamic = getPhotos(tab);
+  const all = getAllPhotos(tab);
+  const staticCount = STATIC_PHOTOS[tab].length;
   grid.innerHTML = '';
 
   if (!all.length) {
@@ -561,27 +528,42 @@ function renderGrid(tab) {
         <circle cx="8.5" cy="8.5" r="1.5"/>
         <path d="M21 15l-5-5L5 21"/>
       </svg>
-      <p>${isAdmin
-        ? 'Haz clic en <strong style="color:var(--gold-light)">Añadir Fotos</strong> para subir imágenes.'
-        : 'Próximamente...'
-      }</p>
+      <p>${isAdmin ? 'Haz clic en <strong style="color:var(--gold-light)">Añadir Fotos</strong> para subir imágenes.' : 'Próximamente...'}</p>
     </div>`;
     return;
   }
 
-  const staticCount = STATIC_PHOTOS[tab].length;
-
   all.forEach((src, i) => {
     const isStatic = i < staticCount;
-    const dynIdx   = i - staticCount; /* índice dentro de las dinámicas */
+    const dynIdx = i - staticCount;
     const div = document.createElement('div');
     div.className = 'photo-item';
     const removeBtn = (!isStatic && isAdmin)
       ? `<button class="photo-remove" onclick="event.stopPropagation();removePhoto('${tab}',${dynIdx})">Eliminar</button>`
       : '';
-    div.innerHTML = `
-      <img src="${src}" alt="Foto ${i+1}" loading="lazy" onclick="openLightbox('${tab}',${i})">
-      <div class="photo-overlay">${removeBtn}</div>`;
+
+    // Las primeras 6 fotos cargan inmediato (están en pantalla o cerca)
+    // El resto usa lazy load con IntersectionObserver
+    const isEager = i < 6;
+    const img = document.createElement('img');
+    img.alt = `Foto ${i + 1}`;
+    img.decoding = 'async';
+    if (isEager) {
+      img.src = src;
+      img.onload = () => img.classList.add('loaded');
+    } else {
+      img.dataset.src = src;       // src vacío hasta que sea visible
+      img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3C/svg%3E';
+      imgObserver.observe(img);    // el observer pone el src real
+    }
+    img.onclick = () => openLightbox(tab, i);
+
+    const overlay = document.createElement('div');
+    overlay.className = 'photo-overlay';
+    overlay.innerHTML = removeBtn;
+
+    div.appendChild(img);
+    div.appendChild(overlay);
     grid.appendChild(div);
   });
 }
@@ -593,28 +575,34 @@ function renderAll() {
 
 /* ── LIGHTBOX ── */
 let lbTab = '', lbIndex = 0;
-
 function openLightbox(tab, idx) {
   lbTab = tab; lbIndex = idx;
   const all = getAllPhotos(tab);
-  document.getElementById('lightboxImg').src = all[idx];
+  const lb = document.getElementById('lightboxImg');
+  lb.src = all[idx];
   document.getElementById('lightbox').classList.add('active');
   document.body.style.overflow = 'hidden';
-}
 
+  // 10. PRELOAD siguiente y anterior foto para navegación instantánea
+  [idx - 1, idx + 1].forEach(n => {
+    const realN = (n + all.length) % all.length;
+    if (all[realN]) { const pre = new Image(); pre.src = all[realN]; }
+  });
+}
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('active');
   document.body.style.overflow = '';
 }
-
 function lbBgClick(e) {
   if (e.target === document.getElementById('lightbox')) closeLightbox();
 }
-
 function lbNav(dir) {
   const all = getAllPhotos(lbTab);
   lbIndex = (lbIndex + dir + all.length) % all.length;
   document.getElementById('lightboxImg').src = all[lbIndex];
+  // preload siguiente en la dirección que se navega
+  const next = (lbIndex + dir + all.length) % all.length;
+  if (all[next]) { const pre = new Image(); pre.src = all[next]; }
 }
 
 /* ── MODAL ── */
