@@ -9,7 +9,7 @@
 <!-- ========================================== -->
 <title>Lau SV Photography | Fotógrafo en Bayamón, Puerto Rico</title>
 <meta name="description" content="Portafolio profesional de Lau SV Photography. Especialistas en fotografía de eventos, retratos y sesiones creativas en Bayamón y todo Puerto Rico.">
-<meta name="keywords" content="Lau SV Photography, fotógrafos en Bayamón, fotografía de eventos Puerto Rico, fotógrafo profesional, retratos, alquiler de luces">
+<meta name="keywords" content="Lau SV Photography, fotógrafos en Bayamón, fotografía de eventos Puerto Rico, fotógrafo profesional, retratos">
 
 <meta name="google-site-verification" content="Qv2PeCE0BYpT0Cb2SqsqRt7D-r_d9Op3cfGI84ynXws" />
 <!-- ========================================== -->
@@ -93,7 +93,7 @@ nav{
 .section-title{font-family:var(--font-serif);font-weight:300;font-size:clamp(34px,5vw,56px);line-height:1.1;margin-bottom:48px;}
 
 /* SERVICES */
-.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);}
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--border);border:1px solid var(--border);}
 .service-card{background:var(--dark);padding:48px 36px;position:relative;overflow:hidden;transition:background .4s;}
 .service-card:hover{background:var(--card);}
 .service-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:linear-gradient(to right,var(--gold),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s;}
@@ -260,7 +260,6 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
 
 <!-- HERO -->
 <div class="hero">
-  <!-- ¡TEXTOS SEO MEJORADOS AQUÍ! -->
   <p class="hero-eyebrow">Fotografía de Eventos &amp; Retratos</p>
   <h1>Lau SV<br><em>Photography</em></h1>
   <p class="hero-sub">Capturando tus mejores momentos en Bayamón y todo Puerto Rico</p>
@@ -289,11 +288,6 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
         <div class="service-num">02</div>
         <h3>Retratos</h3>
         <p>Sesiones personalizadas en estudio o exteriores. Desde retratos familiares hasta sesiones individuales, cada imagen cuenta tu historia única.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-num">03</div>
-        <h3>Alquiler de Equipo de Luces</h3>
-        <p>Equipo profesional de iluminación disponible para tus proyectos. Softboxes, reflectores, LED y más — todo lo que necesitas para lograr la luz perfecta.</p>
       </div>
     </div>
   </div>
@@ -371,7 +365,6 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
     <h2 class="section-title">Acerca de mí</h2>
     <div class="about-text">
       <p>La fotografía no es solo capturar imágenes — es preservar emociones, congelar el tiempo y contar historias que las palabras no pueden expresar.</p>
-      <!-- ¡TEXTO SEO MEJORADO AQUÍ! -->
       <p>Me especializo en eventos y retratos en Bayamón y toda el área metropolitana, trabajando siempre con autenticidad y pasión. Cada sesión es única, cada foto es una obra pensada para ti y para los momentos que merecen ser recordados.</p>
     </div>
   </div>
@@ -383,7 +376,7 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
     <p class="section-label">Hablemos</p>
     <h2 class="section-title">¿Tienes un proyecto?</h2>
     <p style="color:var(--gray);font-size:14px;line-height:1.8">
-      Estoy disponible para sesiones de retratos, eventos y alquiler de equipo.<br>Escríbeme y lo coordinamos.
+      Estoy disponible para sesiones de retratos y eventos.<br>Escríbeme y lo coordinamos.
     </p>
     <div class="contact-links">
       <a href="mailto:lausvphotography@gmail.com" class="contact-link">
@@ -408,7 +401,7 @@ footer p{font-size:11px;letter-spacing:2px;color:var(--gray);}
   <button class="admin-dot" onclick="handleAdmin()">·</button>
 </footer>
 
-<!-- 8. SCRIPT DIFERIDO: carga después del HTML, no bloquea la página -->
+<!-- 8. SCRIPT DIFERIDO -->
 <script defer>
 /* ── NAVIGATION ── */
 function navTo(id) {
@@ -511,8 +504,7 @@ function getAllPhotos(tab) {
   return [...STATIC_PHOTOS[tab], ...getPhotos(tab)];
 }
 
-/* ── 9. INTERSECTION OBSERVER: lazy load inteligente ──
-   Carga la foto solo cuando está a 200px de entrar en pantalla */
+/* ── 9. INTERSECTION OBSERVER ── */
 const imgObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -521,12 +513,12 @@ const imgObserver = new IntersectionObserver((entries) => {
         img.src = img.dataset.src;
         img.removeAttribute('data-src');
         img.onload = () => img.classList.add('loaded');
-        img.onerror = () => img.classList.add('loaded'); // evita skeleton eterno
+        img.onerror = () => img.classList.add('loaded');
       }
       imgObserver.unobserve(img);
     }
   });
-}, { rootMargin: '200px 0px' }); // empieza a cargar 200px antes de ser visible
+}, { rootMargin: '200px 0px' });
 
 function renderGrid(tab) {
   const grid = document.getElementById('grid-' + tab);
@@ -555,8 +547,6 @@ function renderGrid(tab) {
       ? `<button class="photo-remove" onclick="event.stopPropagation();removePhoto('${tab}',${dynIdx})">Eliminar</button>`
       : '';
 
-    // Las primeras 6 fotos cargan inmediato (están en pantalla o cerca)
-    // El resto usa lazy load con IntersectionObserver
     const isEager = i < 6;
     const img = document.createElement('img');
     img.alt = `Foto ${i + 1}`;
@@ -565,9 +555,9 @@ function renderGrid(tab) {
       img.src = src;
       img.onload = () => img.classList.add('loaded');
     } else {
-      img.dataset.src = src;       // src vacío hasta que sea visible
+      img.dataset.src = src;
       img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3C/svg%3E';
-      imgObserver.observe(img);    // el observer pone el src real
+      imgObserver.observe(img);
     }
     img.onclick = () => openLightbox(tab, i);
 
@@ -596,7 +586,6 @@ function openLightbox(tab, idx) {
   document.getElementById('lightbox').classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  // 10. PRELOAD siguiente y anterior foto para navegación instantánea
   [idx - 1, idx + 1].forEach(n => {
     const realN = (n + all.length) % all.length;
     if (all[realN]) { const pre = new Image(); pre.src = all[realN]; }
@@ -613,7 +602,6 @@ function lbNav(dir) {
   const all = getAllPhotos(lbTab);
   lbIndex = (lbIndex + dir + all.length) % all.length;
   document.getElementById('lightboxImg').src = all[lbIndex];
-  // preload siguiente en la dirección que se navega
   const next = (lbIndex + dir + all.length) % all.length;
   if (all[next]) { const pre = new Image(); pre.src = all[next]; }
 }
